@@ -1,0 +1,60 @@
+server:
+  servlet:
+    encoding:
+      force-response: true
+  port: 9090
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 200MB
+  devtools:
+    restart:
+      enable: true
+      additional-paths: src/main/java
+  datasource:
+    name: printWebDB
+    url: jdbc:mysql://localhost:3306/printWebDB
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      max-lifetime: 30000
+  application:
+    name: print-server
+logging:
+  level:
+    root: info
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      total-size-cap: 1GB
+      max-history: 20
+  file:
+    name: /logs/${spring.application.name}.out.log
+
+price:
+  duplex: [ 1,0.7,0.7 ]
+  color: [ 0.15,0.3 ]
+
+
+alipay:
+  # 应用ID,您的APPID，收款账号既是您的APPID对应支付宝账号
+  app_id:
+  # 商户私钥，您的PKCS8格式RSA2私钥
+  merchant_private_key:
+  # 支付宝公钥,查看地址：https://openhome.com/platform/keyManage.htm 对应APPID下的支付宝公钥。
+  alipay_public_key:
+  # 服务器异步通知页面路径需http://格式的完整路径，不能加?id=123这类自定义参数
+  notify_url:
+  # 页面跳转同步通知页面路径 需http://格式的完整路径，不能加?id=123这类自定义参数
+  return_url:
+  # 签名方式
+  sign_type: RSA2
+  # 字符编码格式
+  charset: utf-8
+  # 支付宝网关
+  gatewayUrl: https://openapi.alipaydev.com/gateway.do
+  # 日志路径
+  log_path: "/user"
