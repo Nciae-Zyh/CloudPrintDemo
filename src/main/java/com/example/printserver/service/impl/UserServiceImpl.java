@@ -44,6 +44,7 @@ public class UserServiceImpl implements UserService {
     public void setCustomerViewMapper(CustomerViewMapper customerViewMapper) {
         this.customerViewMapper = customerViewMapper;
     }
+
     ShopViewMapper shopViewMapper;
 
     @Autowired
@@ -51,6 +52,13 @@ public class UserServiceImpl implements UserService {
         this.shopViewMapper = shopViewMapper;
     }
 
+    /**
+     * 登录功能
+     *
+     * @param loginMessage 登录信息
+     * @param request      HttpRequest，用于在session添加用户信息
+     * @return 登录的用户类型以及用户数据
+     */
     public CommonResult login(LoginMessage loginMessage, HttpServletRequest request) {
         User user = checkUser(loginMessage.getPhoneNumber());
         if (user != null && user.getPassword().equals(loginMessage.getPassword())) {
@@ -58,19 +66,28 @@ public class UserServiceImpl implements UserService {
             if (user.getUserType() == '1') {
                 CustomerView customer = customerViewMapper.selectById(user.getUid());
                 session.setAttribute("user", customer);
-                return CommonResult.success(customer,"customer");
-            }else if (user.getUserType() == '2'){
+                return CommonResult.success(customer, "customer");
+            } else if (user.getUserType() == '2') {
                 ShopView shop = shopViewMapper.selectById(user.getUid());
-                session.setAttribute("user",shop);
-                return CommonResult.success(shop,"shop");
-            }else {
+                session.setAttribute("user", shop);
+                return CommonResult.success(shop, "shop");
+            } else {
+                /**
+                 *  目前管理员页面暂未书写，留白。
+                 */
                 return CommonResult.failed("暂未设置管理员登陆页面！");
             }
-        }else {
+        } else {
             return CommonResult.validateFailed("用户名或密码错误!");
         }
     }
 
+    /**
+     * 顾客注册功能
+     *
+     * @param customer 顾客注册时的信息表单
+     * @return 注册成功的顾客信息
+     */
     public CommonResult customerRegister(RegisterMessage customer) {
         User user = checkUser(customer.getPhoneNumber());
         if (user != null) {
@@ -90,6 +107,12 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     * 店铺注册
+     *
+     * @param shopView 店铺注册时的信息表单。
+     * @return 返回注册成功的店铺信息
+     */
     public CommonResult shopRegister(RegisterMessage shopView) {
         User user = checkUser(shopView.getPhoneNumber());
         if (user != null) {
