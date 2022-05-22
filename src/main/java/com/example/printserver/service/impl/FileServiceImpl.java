@@ -54,7 +54,7 @@ public class FileServiceImpl implements FileService {
      * 上传文件
      * @param file  从前端传输过来的MultipartFile格式的文件
      * @param uid   用户的id，用于分文件夹存储文件
-     * @return
+     * @return  文件上传后的信息，有文件名，页数
      */
     public CommonResult upload(MultipartFile file, Integer uid) {
         String prePath = api + '/' + uid.toString() + '/';
