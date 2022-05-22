@@ -25,21 +25,47 @@ import java.net.Socket;
 import java.sql.Timestamp;
 import java.util.Date;
 
+/**
+ * 该类为生产场景下的alipay接口实现，目前因无工商资质未使用
+ */
 //@Service("payService")
 public class PayServiceImpl implements PayService {
-    @Autowired
+
     OrderMapper orderMapper;
-    @Autowired
     AlipayConfig alipayConfig;
-    @Autowired
     ShopMapper shopMapper;
-    @Autowired
     Sockets sockets;
 
+    @Autowired
+    public void setOrderMapper(OrderMapper orderMapper) {
+        this.orderMapper = orderMapper;
+    }
+
+    @Autowired
+    public void setAlipayConfig(AlipayConfig alipayConfig) {
+        this.alipayConfig = alipayConfig;
+    }
+
+    @Autowired
+    public void setShopMapper(ShopMapper shopMapper) {
+        this.shopMapper = shopMapper;
+    }
+
+    @Autowired
+    public void setSockets(Sockets sockets) {
+        this.sockets = sockets;
+    }
+
+    /**
+     * 通过oid查询交易的订单号，从而达到填充支付详细信息的功能
+     *
+     * @param oid 订单号
+     * @return 返回一个表单，前端调用该表单来跳转到支付宝支付页面。
+     */
     @Override
     public CommonResult payOrder(Integer oid) {
-        Order order = orderMapper.selectById(oid);
-        Timestamp orderTime = order.getOrderTime();
+        Order order = orderMapper.selectById(oid);  //根据oid检索order
+        Timestamp orderTime = order.getOrderTime(); //通过order中是否有orderTime来判断该订单是否为第一次提交。
         Date date = new Date();
         Timestamp timestamp = new Timestamp(date.getTime());
         if (orderTime == null) {
@@ -52,6 +78,7 @@ public class PayServiceImpl implements PayService {
                 return CommonResult.failed("订单已过期！");
             }
         }
+        //订单信息的填充
         JSONObject bizContent = new JSONObject();
         bizContent.put("out_trade_no", order.getOid());
         bizContent.put("subject", order.getFilename());
@@ -65,6 +92,7 @@ public class PayServiceImpl implements PayService {
         request.setBizContent(bizContent.toString());
         String response = null;
         try {
+            //表单
             response = alipayClient.pageExecute(request).getBody();
         } catch (AlipayApiException e) {
             e.printStackTrace();
@@ -73,6 +101,11 @@ public class PayServiceImpl implements PayService {
         return CommonResult.success(response, "沙盒测试");
     }
 
+    /**
+     * 完成订单的操作，应用于支付宝支付成功回调地址
+     *
+     * @param out_tar_no 订单编号
+     */
     @Override
     public void finishPayment(String out_tar_no) {
         Integer oid = Integer.valueOf(out_tar_no);

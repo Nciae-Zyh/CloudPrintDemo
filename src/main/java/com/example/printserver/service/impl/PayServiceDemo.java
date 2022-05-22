@@ -19,16 +19,36 @@ import java.net.Socket;
 import java.sql.Timestamp;
 import java.util.Date;
 
+/**
+ * 该service为实际应用情况下非支付模式的service，是因为目前没有工商认证特地模拟出的假支付流程
+ */
 @Service("payService")
 public class PayServiceDemo implements PayService {
-    @Autowired
+
     OrderMapper orderMapper;
-    @Autowired
     AlipayConfig alipayConfig;
-    @Autowired
     ShopMapper shopMapper;
-    @Autowired
     Sockets sockets;
+
+    @Autowired
+    public void setOrderMapper(OrderMapper orderMapper) {
+        this.orderMapper = orderMapper;
+    }
+
+    @Autowired
+    public void setAlipayConfig(AlipayConfig alipayConfig) {
+        this.alipayConfig = alipayConfig;
+    }
+
+    @Autowired
+    public void setShopMapper(ShopMapper shopMapper) {
+        this.shopMapper = shopMapper;
+    }
+
+    @Autowired
+    public void setSockets(Sockets sockets) {
+        this.sockets = sockets;
+    }
 
     /**
      * 支付订单

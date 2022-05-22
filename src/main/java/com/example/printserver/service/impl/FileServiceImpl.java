@@ -75,7 +75,7 @@ public class FileServiceImpl implements FileService {
                 filename.lastIndexOf("("),
                 filename.lastIndexOf("（"),
                 filename.lastIndexOf("("),
-                filename.lastIndexOf("）")};
+                filename.lastIndexOf("）")}; //读取出最前非法字符。
         Integer min = min(ku);
         String filepath;
         int last = filename.lastIndexOf('.');
@@ -122,6 +122,17 @@ public class FileServiceImpl implements FileService {
         }
     }
 
+    /**
+     * 该方法已弃用
+     *
+     * @param uid      用户id
+     * @param address  店铺socket地址
+     * @param filename 文件名
+     * @param printNum 打印数量
+     * @param isColor  打印颜色
+     * @param isDuplex 是否为双面打印
+     * @return 返回一个打印成功或失败的数据
+     */
     public CommonResult sendFileToPrint(Integer uid, String address, String filename, Integer printNum, Integer isColor, Integer isDuplex) {
         ExecutorService pool = Executors.newFixedThreadPool(1);
         Future future = pool.submit(new SendFileServe(uid, address, api + '/' + uid.toString() + '/' + filename, printNum, isColor, isDuplex));
