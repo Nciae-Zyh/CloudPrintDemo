@@ -15,4 +15,6 @@ public interface OrderService {
     public CommonResult getOrder(String id);
     public CommonResult getOrders(SearchOrder searchOrder,Integer type);
     public CommonResult deleteOrder(Order order);
+
+    public String finishOrder(Order oid);
 }

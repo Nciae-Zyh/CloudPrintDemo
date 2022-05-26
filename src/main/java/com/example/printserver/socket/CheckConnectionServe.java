@@ -97,8 +97,10 @@ public class CheckConnectionServe {
                 QueryWrapper wrapper = new QueryWrapper();
                 wrapper.eq("socket_address", key);
                 Shop shop = shopMapper.selectOne(wrapper);
-                shop.setSocketAddress(null);
-                shopMapper.updateById(shop);
+                if (shop != null) {
+                    shop.setSocketAddress(null);
+                    shopMapper.updateById(shop);
+                }
                 return true;
             }
             return false;

@@ -69,7 +69,7 @@ public class OrderServiceImpl implements OrderService {
     public Long[] getCustomerOrderStatistics(Integer id, Integer type) {
         Long[] longs;
         QueryWrapper<Order> wrapper = new QueryWrapper<Order>();
-        Long count ;
+        Long count;
         Long color;
         Long duplex;
         Long unPay;
@@ -147,6 +147,14 @@ public class OrderServiceImpl implements OrderService {
     public CommonResult deleteOrder(Order order) {
         order.setOrderState(-1);
         return CommonResult.success(orderMapper.updateById(order), "删除成功");
+    }
+
+    @Override
+    public String finishOrder(Order oid) {
+        Order order = orderMapper.selectById(oid.getOid());
+        order.setOrderState(2);
+        orderMapper.updateById(order);
+        return "订单完成";
     }
 
     @Override

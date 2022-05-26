@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.printserver.mapper.*;
 import com.example.printserver.pojo.LoginMessage;
 import com.example.printserver.pojo.RegisterMessage;
+import com.example.printserver.pojo.SocketIp;
 import com.example.printserver.pojo.dao.*;
 import com.example.printserver.result.CommonResult;
 import com.example.printserver.service.UserService;
@@ -137,6 +138,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public ShopView getShop(String uid) {
         return shopViewMapper.selectById(Integer.valueOf(uid));
+    }
+
+    @Override
+    public String changeShopIp(SocketIp socketIp) {
+        Shop shop = shopMapper.selectById(socketIp.getUid());
+        shop.setSocketAddress(socketIp.getIp());
+        shopMapper.updateById(shop);
+        return "成功";
     }
 
     private User checkUser(String phoneNumber) {

@@ -5,6 +5,7 @@ import com.example.printserver.pojo.dao.Order;
 import com.example.printserver.pojo.dao.OrderView;
 import com.example.printserver.result.CommonResult;
 import com.example.printserver.service.OrderService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,6 +61,8 @@ public class OrderController {
         return orderService.getOrder(oid);
     }
 
+
+
     @PostMapping("customer/getOrder")
     public CommonResult getOrders(@RequestBody SearchOrder searchOrder) {
         return orderService.getOrders(searchOrder, 1);
@@ -73,6 +76,16 @@ public class OrderController {
     @PostMapping("customer/deleteOrder")
     public CommonResult deleteOrder(@RequestBody Order order) {
         return orderService.deleteOrder(order);
+    }
+
+    @GetMapping("getOrder")
+    public CommonResult getPrintOrder(@RequestParam String oid){
+        return orderService.getOrder(oid);
+    }
+
+    @PostMapping("finishOrder")
+    public String finishOrder(@RequestBody Order order){
+        return orderService.finishOrder(order);
     }
 
 }

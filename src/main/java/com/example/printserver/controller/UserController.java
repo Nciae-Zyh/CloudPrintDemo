@@ -2,8 +2,10 @@ package com.example.printserver.controller;
 
 import com.example.printserver.pojo.LoginMessage;
 import com.example.printserver.pojo.RegisterMessage;
+import com.example.printserver.pojo.SocketIp;
 import com.example.printserver.pojo.dao.CustomerView;
 import com.example.printserver.pojo.dao.ShopView;
+import com.example.printserver.pojo.dao.SocketView;
 import com.example.printserver.result.CommonResult;
 import com.example.printserver.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,5 +40,10 @@ public class UserController {
     @PostMapping(value = "customerRegister")
     public CommonResult customerRegister(@RequestBody RegisterMessage customerView){
         return userService.customerRegister(customerView);
+    }
+    @PostMapping(value = "changeShopIp")
+    public String changeShopIp(@RequestBody SocketIp socketIp){
+        return userService.changeShopIp(socketIp);
+
     }
 }
